@@ -32,3 +32,8 @@ Thì các khung giờ được dùng là:
 Thực hiện việc giám sát – cho phép xem và điều chỉnh các khung giờ được dùng trong text file nêu trên, đồng thời cũng xem được lịch sử sử dụng máy của trẻ và các màn hình /phím mà chương trình C đã lưu ở mức Online.
 
 Lưu ý: Chương trình P có thể được chạy cùng lúc từ cả 2 phụ huynh của trẻ (trên 2 máy khác nhau) nên có thể xảy ra đụng độ tài nguyên, ví dụ như khi cả 2 mà cùng lúc sửa text file trên thì có thể dẫn đến data corruption và chương trình cần được thiết kế để các process không cùng lúc đi vào critical section.
+
+## Được code bằng
+
+- [Electron](https://www.electronjs.org/).
+- [Bootstrap](https://getbootstrap.com/).
