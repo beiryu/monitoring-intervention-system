@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Parental Control</title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <h1>Parental Control</h1>
+    <p>Input password to login</p>
+    <form>
+      <input type="password" id="fpass" name="fpass"
+      placeholder="Type password..."><br>
+      <input id="login" type="submit" value="Login">
+    </form>
+    <p id="noti"></p>
+    <script>
+      const {ipcRenderer} = require('electron')
+      document.querySelector('#login').addEventListener('click', function() {
+        let password = document.getElementById("fpass").value;
+        ipcRenderer.send('password', password )
+        //receive message from main.js
+        ipcRenderer.on('password-reply', (event) => {
+          require('./renderer.js');
+        })
+      });
+    </script>
+  </body>
+</html>
