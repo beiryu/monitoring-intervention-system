@@ -17,16 +17,18 @@ Thông tin về <khung giờ được dùng> được lưu trong 01 Text File c�
 F<<.h1:m1>> T<<.h2:m2>> [ D<<.mD>> I<<.mI>> ] [ S<<.mS>> ]  
 </p>
 
-Trong đó F=from , T=to, D=duration, I=interrupt_time, S=sum cho biết khung giờ được dùng là từ <h1:m1>
-đến <h2:m2>; và trong khung giờ này chỉ được dùng mS phút chia làm các quãng mD phút rồi nghỉ mI phút.
-Ví dụ cụ thể, với nội dung file gồm 3 dòng như sau:
-F06:00 T06:45
-F07:30 T11:30 D60 I20 S150
-F19:00 T21:30 S90
+Trong đó F=from , T=to, D=duration, I=interrupt_time, S=sum cho biết khung giờ được dùng là từ <h1:m1> đến <h2:m2>; và trong khung giờ này chỉ được dùng mS phút chia làm các quãng mD phút rồi nghỉ mI phút. Ví dụ cụ thể, với nội dung file gồm 3 dòng như sau:
+- F06:00 T06:45
+- F07:30 T11:30 D60 I20 S150
+- F19:00 T21:30 S90
+
 Thì các khung giờ được dùng là:
 1) Từ 06:00 đến 06:45
-2) Trong khoảng thời gian từ 07:30 đến 11:30 có thể sử dụng máy, nhưng mỗi lần bật máy thì chỉ được dùng tối đa
-60 phút – sau đó máy sẽ không hoạt động cho đến khi đã ngắt đủ 20 phút, đồng thời khi đã dùng đủ 150 phút thì
-máy cũng sẽ không chịu chạy nữa.
-3) Từ 19:00 đến 21:30 có thể bật /tắt máy bất cứ lúc nào nhưng thời gian được dùng tổng cộng bị giới hạn là 90 phút
-(máy sẽ tắt lúc 21:30 hoặc khi đã dùng đủ 90 phút (và sau đó không thể bật lên dùng tiếp dù chưa đến 21:30)) 
+2) Trong khoảng thời gian từ 07:30 đến 11:30 có thể sử dụng máy, nhưng mỗi lần bật máy thì chỉ được dùng tối đa 60 phút – sau đó máy sẽ không hoạt động cho đến khi đã ngắt đủ 20 phút, đồng thời khi đã dùng đủ 150 phút thì máy cũng sẽ không chịu chạy nữa.
+3) Từ 19:00 đến 21:30 có thể bật /tắt máy bất cứ lúc nào nhưng thời gian được dùng tổng cộng bị giới hạn là 90 phút (máy sẽ tắt lúc 21:30 hoặc khi đã dùng đủ 90 phút (và sau đó không thể bật lên dùng tiếp dù chưa đến 21:30)) 
+
+## Chương trình P (for Parent): 
+
+Thực hiện việc giám sát – cho phép xem và điều chỉnh các khung giờ được dùng trong text file nêu trên, đồng thời cũng xem được lịch sử sử dụng máy của trẻ và các màn hình /phím mà chương trình C đã lưu ở mức Online.
+
+Lưu ý: Chương trình P có thể được chạy cùng lúc từ cả 2 phụ huynh của trẻ (trên 2 máy khác nhau) nên có thể xảy ra đụng độ tài nguyên, ví dụ như khi cả 2 mà cùng lúc sửa text file trên thì có thể dẫn đến data corruption và chương trình cần được thiết kế để các process không cùng lúc đi vào critical section.
