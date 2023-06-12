@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Control</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
     <h1>Control</h1>
-    
+
     <form>
       <label for="from">Select a time from:</label>
-      <input type="time" id="from" name="appt">
+      <input type="time" id="from" name="appt" />
       <label for="to">Select a time to:</label>
-      <input type="time" id="to" name="appt">
-      <input type="submit" id="change-info" value="Change">
+      <input type="time" id="to" name="appt" />
+      <input type="submit" id="change-info" value="Change" />
     </form>
 
     <button id="view-history">View history</button>
     <div id="history"></div>
     <script>
-      document.querySelector('#view-history').addEventListener('click', function() {
-        require('./history.js')
+      document.querySelector("#view-history").addEventListener("click", function () {
+        require("./history.js");
       });
-
     </script>
     <script>
-      const fs = require('fs')
-      const path = require('path');
-      document.querySelector('#change-info').addEventListener('click', function() {
+      const fs = require("fs");
+      const path = require("path");
+
+      document.querySelector("#change-info").addEventListener("click", function () {
         let from = document.getElementById("from").value;
         let to = document.getElementById("to").value;
         content = "F" + from + " " + "T" + to;
-        fs.writeFile(path.join(__dirname, 'sync/sync.txt'), content, err => {
+
+        fs.writeFile(path.join(__dirname, "sync/sync.txt"), content, (err) => {
           if (err) return;
-        })
+        });
       });
     </script>
   </body>

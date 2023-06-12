@@ -1,3 +1,3 @@
-const { ipcRenderer } = require('electron');
+const { ipcRenderer } = require("electron");
 
-ipcRenderer.send('render-new-window', 'control');
+ipcRenderer.send("render-new-window", "control");
