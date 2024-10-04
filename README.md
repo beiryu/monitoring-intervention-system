@@ -1,39 +1,151 @@
-# Children's computer time monitoring/intervention system
+# Children's Computer Time Monitoring System
 
-## Chương trình C (for Children): 
+## Table of Contents
 
-Chạy trên máy laptop /desktop của trẻ và được đặt ở chế độ Autorun (tự động chạy khi bật máy), thực hiện các việc:
-- C0: Lấy mật khẩu (từ bàn phím)
-- C1: Nếu chuỗi nhập là mật khẩu của phụ huynh: chương trình đợi đến 60 phút sau thì mới quay lại hỏi lại mật khẩu (thực hiện lại bước C0)
-- C2: Nếu không phải là mật khẩu của phụ huynh:
-  - C2.1: Kiểm tra xem thời điểm hiện tại có nằm trong khung thời gian trẻ chưa được dùng máy hay không:
-    - C2.1.1: Nếu đang trong khoảng thời gian trẻ chưa được dùng máy: Thông báo tới khi nào mới được dùng (hiển thị ra màn hình và /hoặc nói ra loa), sau đó thực hiện song song 2 việc: (1): kiểm tra xem đã đủ 15 giây chưa kể từ lúc thông báo xong & nếu đã đủ thì chương trình tự tắt máy (shutdown hệ điều hành -không cho người dùng can thiệp) – (2) thực hiện lại từ đầu việc C0 & C1 (tức nếu người dùng kịp nhập đúng mật khẩu phụ huynh thì không tắt máy mà thực hiện C1 - đợi đến 60 phút sau…)
-    - C2.1.2: Ngược lại (đang trong khoảng thời gian trẻ được dùng máy):
-      - C2.1.2.1: Nếu mật khẩu không phải mật khẩu của trẻ: thực hiện lại việc hỏi và kiểm tra mật khẩu (thực hiện lại C0) cho đến lần nhập sai mật khẩu thứ 3 thì đặt thời gian không được dùng máy là 10 phút kể từ thời điểm hiện tại rồi tắt máy.
-      - C2.1.2.2: Ngược lại (đúng mật khẩu của trẻ): Đọc thông tin về khung giờ được dùng (a) và Thông báo còn bao nhiêu phút nữa máy sẽ tắt & đến mấy giờ thì trẻ có thể bật lên lại (b), sau đó chạy ở chế độ giám sát thực hiện cùng lúc các việc: (1) Sau mỗi phút lại lưu lại màn hình và /hoặc các phím đã gõ, (2) thực hiện (a) và thấy có thay đổi (do cha /mẹ chạy tiến trình P và điều chỉnh) thì cập nhật thông tin và thực hiện (b), (3) kiểm tra thấy còn 1 phút đến thời điểm tắt máy thì thực hiện (b) và còn 0 phút thì tắt máy.
+- [Requirements](#requirements)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Components](#components)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
 
-Thông tin về <khung giờ được dùng> được lưu trong 01 Text File có đặt synchronize (đồng bộ hóa) qua Cloud để tiến trình P (for Parent) từ các máy khác (có thể chạy trên Windows hoặc Android, MacOS, IOS, Linux,…) có thể tham khảo và điều chỉnh. File có quy ước định dạng mỗi dòng như sau:
-<p align="center">
-F<<.h1:m1>> T<<.h2:m2>> [ D<<.mD>> I<<.mI>> ] [ S<<.mS>> ]  
-</p>
+## Requirements
 
-Trong đó F=from , T=to, D=duration, I=interrupt_time, S=sum cho biết khung giờ được dùng là từ <h1:m1> đến <h2:m2>; và trong khung giờ này chỉ được dùng mS phút chia làm các quãng mD phút rồi nghỉ mI phút. Ví dụ cụ thể, với nội dung file gồm 3 dòng như sau:
-- F06:00 T06:45
-- F07:30 T11:30 D60 I20 S150
-- F19:00 T21:30 S90
+### Process-C (Child's Application)
 
-Thì các khung giờ được dùng là:
-1) Từ 06:00 đến 06:45
-2) Trong khoảng thời gian từ 07:30 đến 11:30 có thể sử dụng máy, nhưng mỗi lần bật máy thì chỉ được dùng tối đa 60 phút – sau đó máy sẽ không hoạt động cho đến khi đã ngắt đủ 20 phút, đồng thời khi đã dùng đủ 150 phút thì máy cũng sẽ không chịu chạy nữa.
-3) Từ 19:00 đến 21:30 có thể bật /tắt máy bất cứ lúc nào nhưng thời gian được dùng tổng cộng bị giới hạn là 90 phút (máy sẽ tắt lúc 21:30 hoặc khi đã dùng đủ 90 phút (và sau đó không thể bật lên dùng tiếp dù chưa đến 21:30)) 
+1. Startup and Authentication
+- R1.1: Automatically start on system boot
+- R1.2: Prompt for password input
+- R1.3: Validate password against parent and child passwords
+2. Parent Authentication Handling
+- R2.1: If parent password is entered, wait for 60 minutes before prompting for password again
+3. Time Management
+- R3.1: Check if current time is within allowed usage periods
+- R3.2: Display and/or announce time until next allowed usage period
+- R3.3: Implement a 15-second grace period before system shutdown when outside allowed times
+- R3.4: Allow password re-entry during the grace period to prevent shutdown
+4. Child Authentication and Usage
+- R4.1: Allow three password attempts for child login
+- R4.2: Implement a 10-minute lockout after three failed attempts
+- R4.3: Display remaining usage time and next available usage period upon successful login
+- R4.4: Monitor and enforce usage time limits
+5. Monitoring and Logging
+- R5.1: Capture screen activity and keystrokes every minute
+- R5.2: Store captured data securely
+6. Real-time Updates
+- R6.1: Continuously check for changes in usage schedules
+- R6.2: Update and display new time limits when changes are detected
+7. Shutdown Procedures
+- R7.1: Warn user 1 minute before scheduled shutdown
+- R7.2: Perform system shutdown at scheduled times or when usage limits are reached
+8. Schedule Management
+- R8.1: Read and interpret usage schedules from a synchronized text file
+- R8.2: Support complex schedule formats (e.g., F06:00 T06:45 D60 I20 S150)
 
-## Chương trình P (for Parent): 
+### Process-P (Parent's Application)
 
-Thực hiện việc giám sát – cho phép xem và điều chỉnh các khung giờ được dùng trong text file nêu trên, đồng thời cũng xem được lịch sử sử dụng máy của trẻ và các màn hình /phím mà chương trình C đã lưu ở mức Online.
+1. Schedule Management
+- R9.1: View current usage schedules
+- R9.2: Modify usage schedules
+- R9.3: Save changes to the synchronized text file
+2. Monitoring
+- R10.1: View child's computer usage history
+- R10.2: Access captured screen activity and keystrokes
+3. Multi-User Support
+- R11.1: Allow simultaneous access from multiple parent devices
+- R11.2: Implement concurrency control to prevent data corruption
+4. Cross-Platform Compatibility
+- R12.1: Support various operating systems (Windows, Android, MacOS, iOS, Linux)
+5. Data Synchronization
+- R13.1: Ensure real-time synchronization of schedule changes across devices
+6. User Interface
+- R14.1: Provide an intuitive interface for schedule management and monitoring
 
-Lưu ý: Chương trình P có thể được chạy cùng lúc từ cả 2 phụ huynh của trẻ (trên 2 máy khác nhau) nên có thể xảy ra đụng độ tài nguyên, ví dụ như khi cả 2 mà cùng lúc sửa text file trên thì có thể dẫn đến data corruption và chương trình cần được thiết kế để các process không cùng lúc đi vào critical section.
+### General System Requirements
 
-## Được code bằng
+1. Security
+- R15.1: Implement secure storage for passwords and usage data
+- R15.2: Ensure encrypted communication between Process-C and Process-P
+2. Performance
+- R16.1: Minimize system resource usage, especially for Process-C
+3. Reliability
+- R17.1: Ensure system stability and error handling
+4. Scalability
+- R18.1: Support multiple child profiles (for families with multiple children)
+
+## Features
+
+- Automatic startup on system boot
+- Password-protected access
+- Customizable time schedules for computer usage
+- Real-time monitoring of screen activity and keystrokes
+- Automatic shutdown based on predefined rules
+- Parent and child interfaces
+
+## Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/children-computer-monitor.git
+   ```
+
+2. Navigate to the project directory:
+   ```
+   cd children-computer-monitor
+   ```
+
+3. Install dependencies for both Process-C and Process-P:
+   ```
+   cd Process-C && npm install
+   cd ../Process-P && npm install
+   ```
+
+## Usage
+
+### Process-C (Child's Application)
+
+1. Start the application:
+   ```
+   cd Process-C && npm start
+   ```
+
+2. Enter the child's password to access the system.
+
+### Process-P (Parent's Application)
+
+1. Start the application:
+   ```
+   cd Process-P && npm start
+   ```
+
+2. Use the interface to set time schedules and view usage history.
+
+## Components
+
+The system consists of two main components:
+
+1. **Process-C (Child's Application)**
+   - Runs on the child's computer
+   - Manages login and usage time
+   - Monitors screen activity and keystrokes
+   - Enforces usage rules and schedules
+
+2. **Process-P (Parent's Application)**
+   - Allows parents to set and modify usage schedules
+   - Provides an interface to view usage history
+   - Synchronizes data with Process-C
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
 
 - [Electron](https://www.electronjs.org/).
 - [Bootstrap](https://getbootstrap.com/).
